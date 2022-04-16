@@ -26,7 +26,7 @@ const store = createStore({
         async loadPosts({ commit }) {
             try {
                 const response = await axios.get('http://localhost:5000/api/loaddata');
-                console.log(response)
+                // console.log(response)
                 // JSON responses are automatically parsed.
                 commit('loadMarkdown', response.data)
             }
@@ -34,17 +34,38 @@ const store = createStore({
                 console.log(error);
             }
         },
-        async savePosts({ commit }, source) {
-            console.log(source)
+        async savePosts({ commit, dispatch }, source) {
+            console.log(commit, source)
             try {
                 const response = await axios({
                     method: "POST", url: "/api/addpost", data: {
                         start: source
                     }
                 })
-                console.log(response)
-                // JSON responses are automatically parsed.
-                commit('addMarkdown', { _id: response, start: source })
+                console.log("response:", response.data)
+                dispatch("loadPosts")
+                // console.log(commit, response)
+
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        ,
+        async deletePost({ commit, dispatch }, ID) {
+            console.log("deletePost called", commit)
+            try {
+                const response = await axios({
+                    method: "DELETE", url: "/api/deletepost", data: {
+                        _id: ID
+                    }
+                })
+                console.log('deleted ->', response);
+                dispatch("loadPosts");
+                //     // JSON responses are automatically parsed.
+                //     // commit('addMarkdown', { _id: response, start: source })
+                //     // this.dispatch("loadPosts")
+
             }
             catch (error) {
                 console.log(error);

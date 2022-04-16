@@ -1,25 +1,38 @@
 let { MongoClient } = require("mongodb");
+var ObjectId = require('mongodb').ObjectId;
 let express = require("express");
 let router = express.Router();
 
 router.get("/loaddata", async (req, res) => {
+    // console.log("Called loaddata")
     let data = await client()
     let posts = await data.find({}).toArray()
 
     res.send(posts)
 })
 
+router.delete("/deletepost", async (req, res) => {
+    // console.log("Called loaddata")
+    let doc = req.body
+    console.log("delete 1", doc)
+    let data = await client()
+    let posts = await data.deleteOne({ _id: ObjectId(doc._id) })
+    console.log("delete 2", posts)
+    res.send("Deleted")
+})
+
 
 router.post("/addpost", async (req, res) => {
     let doc = req.body
-    // console.log(doc.body);
+    console.log(doc.body);
     let data = await client()
-    // console.log(data)
+    // console.log(data);
     let response = await data.insertOne(doc)
-    // console.log(`ID -> ${response.insertedId}`);
+    console.log(`ID -> ${response.insertedId}`);
+    // console.log(`ID -> ${response}`);
     // let posts = await data.find({}).toArray()
 
-    res.send(`${response}`)
+    res.send(`${response.insertedId}`)
 })
 
 

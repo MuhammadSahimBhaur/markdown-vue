@@ -1,27 +1,27 @@
 <template>
   <div>
-    <HelloWorld />
+    <AddMarkdown />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import AddMarkdown from "./components/AddMarkdown.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    AddMarkdown,
   },
 };
 </script>
 
-<style>
+<style >
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+  margin-left: 60px;
+  display: flex;
 }
 </style>
