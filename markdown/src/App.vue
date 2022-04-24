@@ -1,18 +1,33 @@
 <template>
   <div>
-    <div><router-link to="/logout">Logout</router-link><router-view /></div>
-
-    <!-- <AddMarkdown /> -->
+    <div v-if="!loggedIn">
+      <router-link v-if="!isOnLoginPage()" to="/login">Login</router-link
+      ><router-view />
+    </div>
+    <div v-if="loggedIn">
+      <router-link v-if="!isOnLoginPage()" to="/login" v-on:click="logout()"
+        >Logout</router-link
+      >
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
-// import AddMarkdown from "./components/AddMarkdown.vue";
-
 export default {
   name: "App",
-  components: {
-    // AddMarkdown,
+  computed: {
+    loggedIn() {
+      return this.$store.getters.getLoggedIn;
+    },
+  },
+  methods: {
+    isOnLoginPage: function () {
+      return this.$route.path === "/login";
+    },
+    logout: function () {
+      this.$store.dispatch("logout");
+    },
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="loggedIn">
     <div>
       <button v-on:click="save">Save</button>
       <h2>Markdown</h2>
@@ -25,6 +25,7 @@
 import Markdown from "vue3-markdown-it";
 
 export default {
+  name: "AddMarkdown",
   components: {
     Markdown,
   },
@@ -35,6 +36,9 @@ export default {
     };
   },
   computed: {
+    loggedIn() {
+      return this.$store.getters.getLoggedIn;
+    },
     md() {
       return this.$store.getters.getMd;
     },

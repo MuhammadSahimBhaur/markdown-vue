@@ -1,35 +1,27 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import About from "./components/AboutApp.vue";
+import Login from "./components/LogoutApp.vue";
 import AddMarkdown from "./components/AddMarkdown.vue";
 import { createStore } from 'vuex'
 import axios from "axios";
 import { createWebHistory, createRouter } from "vue-router";
 
-// const About = { template: '<div>About</div>' }
-// const Home = { template: '<div>Home</div>' }
-
-
 const routes = [
     { path: '/', component: AddMarkdown },
-    { path: '/logout', component: About },
+    { path: '/login', component: Login },
 ]
 
 const router = createRouter({
-    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHistory(),
     mode: 'history',
     routes, // short for `routes: routes`
 })
 
-// Make sure to _use_ the router instance to make the
-// whole app router-aware.
-
-// Create a new store instance.
 const store = createStore({
     state() {
         return {
-            md: []
+            md: [],
+            loggedin: false
         }
     },
     mutations: {
@@ -58,20 +50,6 @@ const store = createStore({
         async savePosts({ commit }, source) {
             console.log(commit, "savePosts", source)
             commit('addMarkdown', { "start": source, "key": Math.random() })
-            // try {
-            //     const response = await axios({
-            //         method: "POST", url: "/api/addpost", data: {
-            //             start: source
-            //         }
-            //     })
-            //     console.log("response:", response.data)
-            //     dispatch("loadPosts")
-            //     // console.log(commit, response)
-
-            // }
-            // catch (error) {
-            //     console.log(error);
-            // }
         },
         async save({ commit, state }) {
             console.log(commit, state.md)
@@ -93,7 +71,6 @@ const store = createStore({
                 return item.key != ID;
             })
             state.md = newList;
-            // console.log("deletePost called", commit)
             // try {
             //     const response = await axios({
             //         method: "DELETE", url: "/api/deletepost", data: {
@@ -102,23 +79,43 @@ const store = createStore({
             //     })
             //     console.log('deleted ->', response);
             //     dispatch("loadPosts");
-            //     // JSON responses are automatically parsed.
-            //     // commit('addMarkdown', { _id: response, start: source })
-            //     // this.dispatch("loadPosts")
 
-            // }
-            //     catch(error) {
-            //     console.log(error);
-            // }
+        },
+        async login({ state }, { username, password }) {
+            // console.log("action->", username, password)
+            let logincredentials = [username, password]
+            // console.log("action->", logincredentials)
+            try {
+                const response = await axios({
+                    method: "POST", url: "/api/login", data: {
+                        credentials: logincredentials
+                    }
+                })
+                // console.log('login ->', response.data.message);
+                state.loggedin = response.data.message
+                return response.data.message;
+                //     //     dispatch("loadPosts");
+
+            } catch (err) {
+                console.log(err)
+            }
+
+        },
+        async logout({ state }) {
+            // console.log("logout!")
+            state.loggedin = false;
         }
     },
+
+
     getters: {
         getMd(state) {
-            // console.log(state.md)
             return state.md;
+        },
+        getLoggedIn(state) {
+            return state.loggedin;
         }
     }
-
 })
 
 let app = createApp(App)

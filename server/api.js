@@ -42,13 +42,13 @@ router.post("/saveall", async (req, res) => {
     res.send(response.acknowledged)
 })
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
+    console.log(req)
     let [username, password] = req.body.credentials
     let data = await client_user()
     let response = await data.findOne({ "username": username }) // findOne and compare
     // res.end(req.session.views + ' views')
     // console.log("Logged in? ->", req.session.loggedIn)
-    // console.log(response)
     if (response !== null) {
         let saved_password = response.password
         bcrypt.compare(password, saved_password, function (err, result) {
