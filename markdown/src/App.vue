@@ -1,16 +1,18 @@
 <template>
   <div>
-    <AddMarkdown />
+    <div><router-link to="/logout">Logout</router-link><router-view /></div>
+
+    <!-- <AddMarkdown /> -->
   </div>
 </template>
 
 <script>
-import AddMarkdown from "./components/AddMarkdown.vue";
+// import AddMarkdown from "./components/AddMarkdown.vue";
 
 export default {
   name: "App",
   components: {
-    AddMarkdown,
+    // AddMarkdown,
   },
 };
 </script>
